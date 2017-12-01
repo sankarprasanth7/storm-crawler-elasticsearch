@@ -110,7 +110,7 @@ public class IndexerBolt extends AbstractIndexerBolt {
 
         Metadata metadata = (Metadata) tuple.getValueByField("metadata");
         String text = tuple.getStringByField("text");
-
+        String content = tuple.getBinaryByField("content").toString();
         boolean keep = filterDocument(metadata);
         if (!keep) {
             eventCounter.scope("Filtered").incrBy(1);
@@ -129,7 +129,11 @@ public class IndexerBolt extends AbstractIndexerBolt {
             if (fieldNameForText() != null) {
                 builder.field(fieldNameForText(), text);
             }
-
+            System.out.println("************outside*************content***********************");
+            if(content.length() > 0){
+            	builder.field("content",content);
+                System.out.println("*************************content***********************");
+            }
             // send URL as field?
             if (fieldNameForURL() != null) {
                 builder.field(fieldNameForURL(), normalisedurl);
